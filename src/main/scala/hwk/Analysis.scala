@@ -63,12 +63,7 @@ case class Analysis (stmt: Statement) {
           n.entry ++= p.exit
         }
       }
-//      def y = {
-//        case Script(stmts) => vars(stmts)
-//        case BlockStmt(stmts) => vars(stmts)
-//        case VarDeclListStmt(stmts) => vars(stmts)
-//        case _ => Set()
-//      }
+//
 
 
 
