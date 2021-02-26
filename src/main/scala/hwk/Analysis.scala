@@ -48,7 +48,38 @@ case class Analysis (stmt: Statement) {
 
   // worklist algorithm to compute reaching definitions at the entry/exit of each CFG node
   def worklist {
-    // TODO: you can just implement this 
+    // TODO: you can just implement this
+    val q = Queue[Node]();
+    q.enqueue(nodes:_*)
+    while(!q.isEmpty){
+      val n = q.dequeue();
+
+      if(n.entry.isEmpty){
+        n.entry.clear()
+        for(p <- variables){ n.entry += ((p, -1))}
+      } else{
+        n.entry.clear()
+        for(p<- pred(n)){
+          n.entry ++= p.exit
+        }
+      }
+//      def y = {
+//        case Script(stmts) => vars(stmts)
+//        case BlockStmt(stmts) => vars(stmts)
+//        case VarDeclListStmt(stmts) => vars(stmts)
+//        case _ => Set()
+//      }
+
+
+
+
+      val d = n.entry
+      if(d != n.exit){
+        q.enqueue(succ(n): _*)
+        n.exit.clear()
+        n.exit ++=d
+      }
+    }
   }
   
   // make a dot graph with entry/exit reaching definition of every node
@@ -63,6 +94,6 @@ case class Analysis (stmt: Statement) {
 // CFG node to hold the reaching definitions at the entry/exit of a CFG statement
 case class Node(stmt: Statement) {
   val entry = Set[(String, Long)]()
-  val exit = Set[(String, Long)]()
+  var exit = Set[(String, Long)]()
 }
  
